@@ -2,6 +2,7 @@
 ## 目的
 - 事前に用意した多結晶体表面を表す目標画像に整合するような多結晶体モデルを作成し，それに解析条件を付与し，解析まで行うプログラム
 ## 各ファイルの説明
+### CMAES最適化関連
 - create_initial_population.py：３次元空間上に初期個体（複数のボロノイ点の３次元座標の組）を生成するファイル
 - generate_tess_png.py：各個体のテキストファイルからNeperによるボロノイ分割を実行してtessファイルとpngファイルを生成するファイル
 - objective_func.py：目的関数（CMA-ES）について書いたファイル
@@ -10,7 +11,7 @@
 - figure1_2_edge.png：最適化における目標画像
 
 ## 実行手順
-※参照ファイルのパスとかはローカルでの設定のままなので実行するときは要変更！
+※参照ファイルのパスとかはローカルでの設定のままなので実行するときは要変更！  
 ※実行には各種ライブラリ等のインストールが必要
 - CMA-ESによる最適化：
   - 以下のコマンドにより，create_initial_population.py, generate_tess_png.py, objective_func.py, generate_next_generation.pyが条件に達するまで繰り返し実行される．
