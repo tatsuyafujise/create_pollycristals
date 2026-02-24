@@ -2,6 +2,9 @@
 ## 目的
 - 事前に用意した多結晶体表面を表す目標画像に整合するような多結晶体モデルを作成し，それに解析条件を付与し，解析まで行うプログラム
 ## 各ファイルの説明
+最適化とモーフィング
+- master_loop.sh：下の最適化とモーフィング処理，およびobjファイルをstepファイルに変換する一連を実行する
+- obj2step.sh：すでに生成済みのtryフォルダに対して，後からまとめてOBJファイルをSTEPファイルに変換する
 ### CMAES最適化関連
 - create_initial_population.py：３次元空間上に初期個体（複数のボロノイ点の３次元座標の組）を生成する
 - generate_tess_png.py：各個体のテキストファイルからNeperによるボロノイ分割を実行してtessファイルとpngファイルを生成する
@@ -16,9 +19,25 @@
 - change_tess_to_png.py：tess_files_replaced内のtessファイルを元にNeperを用いて全体画像と上面画像を作成し，それぞれ新たに作成したディレクトリpng_files_replaced, top_png_files_replaced内に保存する
 - benchmark：目標画像のobj,全体画像,tess,上面画像ファイルを格納したディレクトリ
 - convert_multi_to_single.py：単一OBJファイルを粒ごとの複数の個別OBJファイルに分割する
+### SpaaceClaim関連
+- count_stp.py：
+  - try1,try2といった連番ディレクトリ内を走査し，生成された.stepファイルのかすをカウントする．
+  - ディレクトリ番号順にソートし，各ディレクトリ毎の結晶粒の個数に関する結果を```result.txt```に格納する
+- rename_grains.sh：
+  - 各tryディレクトリを対象に，cell*.stepというファイルをリネームする
+  - z=4.0の面（Top面）に座標を持つ結晶について，ｘ座標の昇順（左から右）に並び替え，それ以外の結晶は元の番号順にして，新たにcell1.stepから連番でリネームする処理を行う
+- share_topology.sh：scdoc化とトポロジー共有
+  - 各tryディレクトリに対して，SpaceClaim API(V23)を叩くためのPythonスクリプトを動的に生成し，SpaceClaimをバックグラウンドで起動して実行する
+
 ## 実行手順
 ※参照ファイルのパスとかはローカルでの設定のままなので実行するときは要変更！  
 ※実行には各種ライブラリ等のインストールが必要
+- 全体の実行：
+  - 以下のコマンドにより，CMA-ESによる最適化，モーフィング処理，stepファイル変換のすべてが一括して実行できる
+
+    ```bash master_loop.sh```　　
+
+以下は各処理を部分的に実行    
 - CMA-ESによる最適化：
   - 以下のコマンドにより，create_initial_population.py, generate_tess_png.py, objective_func.py, generate_next_generation.pyが条件に達するまで繰り返し実行される．
 
